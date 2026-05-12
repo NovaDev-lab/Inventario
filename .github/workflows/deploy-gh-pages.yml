@@ -19,6 +19,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
@@ -27,11 +29,11 @@ jobs:
         run: npm ci
       - name: Build
         env:
-          # Vacío = sitio en la raíz (p.ej. usuario.github.io). Para proyecto en subruta usa "/nombre-repo".
-          NEXT_PUBLIC_BASE_PATH: ""
+          # Para repos de proyecto en Pages: /<repo>. Ej: /Inventario
+          NEXT_PUBLIC_BASE_PATH: /${{ github.event.repository.name }}
         run: npm run build
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: out
 
